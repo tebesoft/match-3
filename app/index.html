@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="description" content="<%= htmlWebpackPlugin.options.description %>">
+    <style>
+      html { box-sizing: border-box; }
+      html, body { background: #000; overflow: hidden; -ms-touch-action: none; touch-action: none; }
+      * { margin: 0; padding: 0; }
+      *, *:before, *:after { box-sizing: inherit; }
+    </style>
+  </head>
+
+  <body>
+    <!-- app scripts will be injected here automatically -->
+    <script>
+      document.addEventListener("DOMContentLoaded", create);
+
+      function create () {
+          window.addEventListener('resize', resize);
+          setTimeout(function() {
+            resize();
+          },0);
+      }
+
+      function resize() {
+            var canvas = document.getElementsByTagName('canvas')[0];
+            canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border: 1px solid blue;";
+
+            var width = window.innerWidth, height = window.innerHeight;
+            var wratio = width / height, ratio = canvas.width / canvas.height;
+
+            if (wratio < ratio) {
+                canvas.style.width = width + "px";
+                canvas.style.height = (width / ratio) + "px";
+            } else {
+                canvas.style.width = (height * ratio) + "px";
+                canvas.style.height = height + "px";
+            }
+      }
+    </script>
+  </body>
+
+</html>
