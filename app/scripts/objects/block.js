@@ -10,8 +10,16 @@ export default class Block extends Phaser.GameObjects.Sprite {
    *  @param {number} y - The vertical coordinate relative to the scene viewport.
    */
   constructor(scene, x, y, data) {
-    super(scene, x, y, 'block');
+    super(scene, x, y, data.asset);
     this.data = data;
+    this.row = data.row;
+    this.col = data.col;
+  }
 
+  reset(x, y, data) {
+    this.setPosition(x, y);
+    this.setTexture(data.asset);
+    this.row = data.row;
+    this.col = data.col;
   }
 }

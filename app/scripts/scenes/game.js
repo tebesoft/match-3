@@ -1,4 +1,5 @@
 import Board from '@/objects/board';
+import Block from '@/objects/block';
 
 export default class Game extends Phaser.Scene {
   /**
@@ -21,7 +22,7 @@ export default class Game extends Phaser.Scene {
     this.NUM_ROWS = 8;
     this.NUM_COLS = 8;
     // candy variations
-    this.NUM_VARIATIONS = 7;
+    this.NUM_VARIATIONS = 6;
     this.BLOCK_SIZE = 35;
     this.ANIMATION_TIME = 300;
 
@@ -29,6 +30,43 @@ export default class Game extends Phaser.Scene {
     this.background.setOrigin(0);
 
     this.board = new Board(this, this.NUM_ROWS, this.NUM_COLS, this.NUM_VARIATIONS);
+    this.blocks = this.add.group();
+
+    this.graphics = this.add.graphics();
+    this.drawBoard();
+  }
+
+  drawBoard() {
+    this.graphics.lineStyle(1, 0x000, 0.2);
+
+
+    for(let i = 0; i < this.NUM_ROWS; i++) {
+      for(let j = 0; j < this.NUM_COLS; j++) {
+        const x = 36 + j * (this.BLOCK_SIZE + 6);
+        const y = 150 + i * (this.BLOCK_SIZE + 6);
+
+        this.graphics.strokeRect(x-21, y-21, this.BLOCK_SIZE + 6, this.BLOCK_SIZE + 6);
+
+        this.createBlock(x, y, {
+          asset: 'block' + this.board.grid[i][j],
+          row: i,
+          col: j
+        });
+      }
+    }
+  }
+
+  createBlock(x, y, data) {
+    let block = this.blocks.getFirstDead(false, x, y);
+    if (block == null) {
+      block = new Block(this, x, y, data);
+      this.blocks.add(block, true);
+    }
+    else {
+      block.reset(x, y, data);
+    }
+
+    return block;
   }
 
   /**
