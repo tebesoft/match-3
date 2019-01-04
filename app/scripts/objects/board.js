@@ -46,12 +46,18 @@ export default class Board {
         this.grid[i][j] = variation;
       }
     }
+
+    //if there are any chains, re-populate
+    var chains = this.findAllChains();
+    if (chains.length > 0) {
+      this.populateGrid();
+    }
   }
 
   populateReserveGrid() {
     for (let i = 0; i < this.RESERVE_ROW; i++) {
       for (let j = 0; j < this.cols; j++) {
-        const variation = Phaser.Math.Between(0, this.blockVariations);
+        const variation = Phaser.Math.Between(1, this.blockVariations);
         this.reserveGrid[i][j] = variation;
       }
     }
@@ -215,7 +221,7 @@ export default class Board {
     this.grid[targetRow][col] = this.grid[sourceRow][col];
     this.grid[sourceRow][col] = 0;
 
-    //this.state.dropBlock(sourceRow, targetRow, col);
+    this.scene.dropBlock(sourceRow, targetRow, col);
   }
 
   /*
@@ -225,7 +231,7 @@ export default class Board {
     this.grid[targetRow][col] = this.reserveGrid[sourceRow][col];
     this.reserveGrid[sourceRow][col] = 0;
 
-    //this.state.dropReserveBlock(sourceRow, targetRow, col);
+    this.scene.dropReserveBlock(sourceRow, targetRow, col);
   }
 
   /*
