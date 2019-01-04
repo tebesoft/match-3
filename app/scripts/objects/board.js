@@ -42,7 +42,7 @@ export default class Board {
   populateGrid() {
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
-        const variation = Phaser.Math.Between(0, this.blockVariations);
+        const variation = Phaser.Math.Between(1, this.blockVariations);
         this.grid[i][j] = variation;
       }
     }
@@ -204,7 +204,7 @@ export default class Board {
       this.grid[block.row][block.col] = 0;
 
       //kill the block object
-      // this.state.getBlockFromColRow(block).kill();
+      this.scene.getBlockFromColRow(block).deactivate();
     });
   }
 

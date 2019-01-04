@@ -31,14 +31,15 @@ export default class Game extends Phaser.Scene {
 
     this.board = new Board(this, this.NUM_ROWS, this.NUM_COLS, this.NUM_VARIATIONS);
     this.blocks = this.add.group();
-
     this.graphics = this.make.graphics();
     this.drawBoard();
+
+    this.time.delayedCall(1000, () => this.board.clearChains());
   }
 
   drawBoard() {
-    this.graphics.lineStyle(1, 0x000, 0.2);
-    this.graphics.strokeRect(0, 0, this.BLOCK_SIZE + 6, this.BLOCK_SIZE + 6);
+    this.graphics.fillStyle(0x000, 0.2);
+    this.graphics.fillRect(0, 0, this.BLOCK_SIZE + 4, this.BLOCK_SIZE + 4);
     this.graphics.generateTexture('cell', this.BLOCK_SIZE + 6, this.BLOCK_SIZE + 6);
 
     for(let i = 0; i < this.NUM_ROWS; i++) {
@@ -68,6 +69,10 @@ export default class Game extends Phaser.Scene {
     }
 
     return block;
+  }
+
+  getBlockFromColRow(block) {
+    return this.blocks.getChildren().find((item) => item.row == block.row && item.col == block.col);
   }
 
   /**

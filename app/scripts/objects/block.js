@@ -22,4 +22,15 @@ export default class Block extends Phaser.GameObjects.Sprite {
     this.row = data.row;
     this.col = data.col;
   }
+
+  deactivate() {
+    this.setTexture('deadBlock');
+    this.col = null;
+    this.row = null;
+
+    this.scene.time.delayedCall(this.scene.ANIMATION_TIME/2, () => {
+      this.setActive(false);
+      this.setVisible(false);
+    });
+  }
 }
