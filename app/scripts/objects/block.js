@@ -14,6 +14,9 @@ export default class Block extends Phaser.GameObjects.Sprite {
     this.data = data;
     this.row = data.row;
     this.col = data.col;
+
+    this.setInteractive();
+    this.on('pointerdown', function() { this.scene.pickBlock(this); }, this);
   }
 
   reset(x, y, data) {

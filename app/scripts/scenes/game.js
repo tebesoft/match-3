@@ -41,11 +41,11 @@ export default class Game extends Phaser.Scene {
 
     // this.time.delayedCall(2000, () => this.board.clearChains());
     // this.time.delayedCall(3000, () => this.board.updateGrid());
-    this.time.delayedCall(1000, () => {
-      let block1 = this.blocks.getChildren()[10];
-      let block2 = this.blocks.getChildren()[11];
-      this.swapBlocks(block1, block2);
-    });
+    // this.time.delayedCall(1000, () => {
+    //   let block1 = this.blocks.getChildren()[10];
+    //   let block2 = this.blocks.getChildren()[11];
+    //   this.swapBlocks(block1, block2);
+    // });
 
   }
 
@@ -80,10 +80,11 @@ export default class Game extends Phaser.Scene {
     if (block == null) {
       block = new Block(this, x, y, data);
       this.blocks.add(block, true);
-      this.children.bringToTop(block);
     } else {
       block.reset(x, y, data);
     }
+
+    this.children.bringToTop(block);
     block.setActive(true);
     block.setVisible(true);
     return block;
@@ -156,7 +157,7 @@ export default class Game extends Phaser.Scene {
           }
         } else {
           this.isReversingSwap = false;
-          //this.clearSelection();
+          this.clearSelection();
         }
       }
     });
@@ -166,17 +167,67 @@ export default class Game extends Phaser.Scene {
       x: block1.x,
       y: block1.y,
       duration: this.ANIMATION_TIME,
-      ease: 'Linear'
+      ease: 'Linear',
+      onComplete: () => {
+        this.children.bringToTop(block2);
+      }
     });
   }
 
-  /**
-   *  Called when a scene is updated. Updates to game logic, physics and game
-   *  objects are handled here.
-   *
-   *  @protected
-   *  @param {number} t Current internal clock time.
-   *  @param {number} dt Time elapsed since last update.
-   */
-  update(/* t, dt */) {}
+  pickBlock(block) {
+
+    //only swap if the UI is not blocked
+    if(this.isBoardBlocked) {
+      return;
+    }
+
+    //if there is nothing selected
+    if(!this.selectedBlock) {
+      //highlight the first block
+      block.setScale(1.5);
+
+      this.selectedBlock = block;
+    }
+    else {
+      //second block you are selecting is target block
+      this.targetBlock = block;
+
+      //only adjacent blocks can swap
+      if(this.board.checkAdjacent(this.selectedBlock, this.targetBlock)) {
+        //block the UI
+        this.isBoardBlocked = true;
+
+        //swap blocks
+        this.swapBlocks(this.selectedBlock, this.targetBlock);
+      }
+      else {
+        this.clearSelection();
+      }
+    }
+  }
+
+  clearSelection() {
+    this.isBoardBlocked = false;
+    this.selectedBlock.setScale(1);
+    this.selectedBlock = null;
+    this.targetBlock = null;
+  }
+
+  updateBoard() {
+    this.board.clearChains();
+    this.board.updateGrid();
+
+    //after the dropping has ended
+    this.time.delayedCall(this.ANIMATION_TIME, () => {
+      //see if there are new chains
+      var chains = this.board.findAllChains();
+
+      if(chains.length > 0) {
+        this.updateBoard();
+      }
+      else {
+        this.clearSelection();
+      }
+    });
+  }
 }
