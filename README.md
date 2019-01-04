@@ -1,8 +1,7 @@
-# [Match 3 game with Phaser 3](https://example.com/)
-
-![Screenshot](screenshot.png)
+# [Match 3 game with Phaser 3](https://tebesoft.github.io/match-3/dist/)
 
 ---
+[Match 3 Demo](https://tebesoft.github.io/match-3/dist/)
 
 Congratulations, your new project is ready!
 
