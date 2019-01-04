@@ -131,6 +131,8 @@ export default class Game extends Phaser.Scene {
       duration: this.ANIMATION_TIME,
       ease: 'Linear',
       onComplete: () => {
+        this.children.bringToTop(block1);
+
         // update model
         this.board.swap(block1, block2);
 
