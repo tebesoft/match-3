@@ -38,15 +38,6 @@ export default class Game extends Phaser.Scene {
     this.blocks = this.add.group();
     this.graphics = this.make.graphics();
     this.drawBoard();
-
-    // this.time.delayedCall(2000, () => this.board.clearChains());
-    // this.time.delayedCall(3000, () => this.board.updateGrid());
-    // this.time.delayedCall(1000, () => {
-    //   let block1 = this.blocks.getChildren()[10];
-    //   let block2 = this.blocks.getChildren()[11];
-    //   this.swapBlocks(block1, block2);
-    // });
-
   }
 
   drawBoard() {
@@ -133,9 +124,6 @@ export default class Game extends Phaser.Scene {
   }
 
   swapBlocks(block1, block2) {
-    //when swapping scale block1 back to 1
-    //block1.scale.setTo(1);
-
     this.tweens.add({
       targets: block1,
       x: block2.x,
